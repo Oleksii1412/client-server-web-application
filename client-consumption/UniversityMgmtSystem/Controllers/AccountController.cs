@@ -57,8 +57,8 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Message = "Invalid Username or Password";
-            return View("Login");
-        }
+			return RedirectToAction("Dashboard", "Student", new { email = user.Email });
+		}
 
         public IActionResult Register()
         {

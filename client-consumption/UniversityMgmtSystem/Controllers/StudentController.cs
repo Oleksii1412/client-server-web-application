@@ -5,9 +5,9 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 {
 	public class StudentController : Controller
 	{
-		public IActionResult DashBoard()
+		public IActionResult DashBoard(string email)
 		{
-
+			ViewBag.Email = email;
 			return View();
 		}
 
