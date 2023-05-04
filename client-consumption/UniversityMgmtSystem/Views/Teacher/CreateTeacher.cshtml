@@ -1,0 +1,30 @@
+﻿@model Teacher
+<div class="Container">
+
+	<div class="text-danger">
+
+		<p class="text-danger">@ViewData["Error"]</p>
+	</div>
+	<form asp-action="CreateTeacher" method="post">
+
+		<fieldset>
+
+
+			<div class="form-group">
+
+				<label>Teacher Name</label>
+				<input type="text" asp-for="TeacherName" />
+
+			</div>
+
+			
+			<button type="submit" class="btn btn-success"> Create </button>
+
+		</fieldset>
+
+	</form>
+
+
+
+
+</div>

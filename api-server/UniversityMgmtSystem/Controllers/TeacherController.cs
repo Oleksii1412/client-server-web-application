@@ -26,7 +26,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 
 		[HttpPost]
 		[Route("CreateTeacher")]
-		public async Task<IActionResult> CreateTeacher( Teacher teacher)
+		public async Task<IActionResult> CreateTeacher([FromBody] Teacher teacher)
 		{
 
 			if(teacher == null)
@@ -47,7 +47,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		}
 		[HttpPost]
 		[Route("UpdateTeacher")]
-		public async Task<IActionResult> UpdateTeacher(Teacher teacher)
+		public async Task<IActionResult> UpdateTeacher([FromBody] Teacher teacher)
 		{
 
 			var editTeacher = await _db.Teachers.Where(t => t.TeacherId == teacher.TeacherId).FirstOrDefaultAsync();
@@ -68,6 +68,44 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		
 
 		}
+		[HttpGet]
+		[Route("GetTeacherById/{id}")]
+		public async Task<Teacher> GetTeacherById(int id)
+		{
+			Teacher teacher = _db.Teachers.FirstOrDefault(c => c.TeacherId == id);
+
+
+			return teacher;
+
+		}
+
+
+		[HttpDelete]
+		[Route("DeleteTeacher/{id}")]
+		public async Task<IActionResult> DeleteTeacher(int id)
+		{
+			var deleteTeacher = await _db.Teachers.Where(c => c.TeacherId == id).FirstOrDefaultAsync();
+			if (deleteTeacher == null)
+			{
+
+				return StatusCode(StatusCodes.Status404NotFound,
+					new Response
+					{
+						Status = "Error",
+						Message = "No Teacher fount at id: " + id
+
+					});
+
+
+			}
+			_db.Teachers.Remove(deleteTeacher);
+			await _db.SaveChangesAsync();
+
+
+
+			return StatusCode(StatusCodes.Status200OK);
+		}
+
 
 	}
 }
