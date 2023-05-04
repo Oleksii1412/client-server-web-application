@@ -14,7 +14,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
             using (HttpClient httpClient = new HttpClient())
             {
 
-                var response = await httpClient.GetAsync("https://localhost:7003/api/Teacher/GetTeachers");
+                var response = await httpClient.GetAsync("https://localhost:7003/api/Teacher/GetTeacher");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -46,9 +46,9 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
             var response = await _httpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
             {
-                var statuscode = await response.Content.ReadAsStringAsync();
-                var statusmessgae = JsonConvert.DeserializeObject<ApiStatus>(statuscode);
-                ViewData["Error"] = statusmessgae.Message;
+                //var statuscode = await response.Content.ReadAsStringAsync();
+                //var statusmessgae = JsonConvert.DeserializeObject<ApiStatus>(statuscode);
+                //ViewData["Error"] = statusmessgae.Message;
                 return View();
             }
 
@@ -56,7 +56,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateTeacher(int id)
+        public async Task<IActionResult> UpdateTeacher( int id)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -97,7 +97,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
                 }
 
 
-                return View("Index");
+                return RedirectToAction("Index");
             }
         }
         [HttpGet]
@@ -120,15 +120,16 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 
             }
 
-            return BadRequest("No Course Found for id:" + id);
+            return BadRequest("No Teacher Found for id:" + id);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteTeacher(Teacher teacher)
         {
-            ApiStatus apiStatus = new ApiStatus();
+            
             using (HttpClient httpClient = new HttpClient())
             {
-                var response = await httpClient.DeleteAsync("https://localhost:7003/api/Teacher/DeleteTeacher/" + teacher.TeacherId);
+				ApiStatus apiStatus = new ApiStatus();
+				var response = await httpClient.DeleteAsync("https://localhost:7003/api/Teacher/DeleteTeacher/" + teacher.TeacherId);
                 if (!response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -139,14 +140,14 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 
 
                 }
-                return BadRequest("No Course Found for id:" + teacher.TeacherId);
+				return RedirectToAction("Index");
 
-            }
-
-
+			}
 
 
-        }
+			
+
+		}
 
     }
 }
