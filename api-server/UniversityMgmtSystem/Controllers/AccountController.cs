@@ -95,10 +95,16 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		[Route("ChangePassword")]
 		public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordModel changePasswordUser)
 		{
-			var user = await _userManager.FindByNameAsync(changePasswordUser.EmailAddress);
-			
-			
-			if (!await _userManager.CheckPasswordAsync(user, changePasswordUser.CurrentPassword.Trim()))
+			var checkUser = await _userManager.FindByNameAsync(changePasswordUser.EmailAddress);
+			if(checkUser==null)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, new Response
+				{
+					Status = "Error",
+					Message = "UserName not Found"
+				});
+			}
+            if (!await _userManager.CheckPasswordAsync(checkUser, changePasswordUser.CurrentPassword.Trim()))
 			{
 				return StatusCode(StatusCodes.Status406NotAcceptable, new Response
 				{
@@ -106,7 +112,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 					Message = "CurrentPassword not Found"
 				});
 			}
-		 var result = await _userManager.ChangePasswordAsync(user, changePasswordUser.CurrentPassword, changePasswordUser.NewPassword);
+		 var result = await _userManager.ChangePasswordAsync(checkUser, changePasswordUser.CurrentPassword, changePasswordUser.NewPassword);
 			if(result.Succeeded) {
 				return StatusCode(StatusCodes.Status202Accepted, new Response
 				{
