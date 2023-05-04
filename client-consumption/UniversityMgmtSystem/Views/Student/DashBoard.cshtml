@@ -1,10 +1,16 @@
-﻿<div class="container" >
+﻿@using UniversityMgmtSystemClientConsuming.ViewModels;
+ @model LoginVM
+<div class="container" >
 
 	<div class="row justify-content-center">
-
-		<a class=" nav-link my-2 m-auto"> Profile </a>
-		<a class=" nav-link my-2 m-auto">Courses</a>
-		<a class=" nav-link my-2 m-auto" asp-action="GetCourse">Enroll</a>
-
+		<div class=" nav-link my-2 m-auto">
+			@Html.ActionLink("Profile","GetProfile",new { StudentEmail=Model.Email })
+		</div>
+		<div class=" nav-link my-2 m-auto">
+			@Html.ActionLink("Courses","GetEnrollCourse",new { StudentEmail=Model.Email })
+		</div>
+		<div class=" nav-link my-2 m-auto">
+			@Html.ActionLink("Enroll","GetCourse",new { StudentEmail=Model.Email })
+		</div>
 	</div>
 </div>
