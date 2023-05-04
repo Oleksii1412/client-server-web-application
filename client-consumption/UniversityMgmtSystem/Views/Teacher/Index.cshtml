@@ -1,0 +1,53 @@
+﻿@model List<Teacher>
+
+
+<div class="container">
+	<div class="row"> 
+		<a>create</a>
+	</div>
+	
+	<table class="table table-striped">
+		<thead>
+
+			<tr>
+				<th>
+					Id
+				</th>
+				<th>
+					TeacherName
+				</th>
+				
+				<th>
+					Edit
+				</th>
+				<th>
+					Delete
+				</th>
+			</tr>
+
+
+
+		</thead>
+
+
+		<tbody>
+			@foreach(Teacher teacher in Model)
+			
+			{
+			
+			<tr>
+
+				<td>@teacher.TeacherId</td>
+				<td>@teacher.TeacherName</td>
+				<td>@Html.ActionLink("Edit","UpdateTeacher", new {id= teacher.TeacherId})</td>
+					<td>@Html.ActionLink("delete","DeleteTeacher",new {id=teacher.TeacherId})</td>
+
+			</tr>
+			}
+
+		</tbody>
+
+
+	</table>
+
+</div>
