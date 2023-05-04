@@ -9,7 +9,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 	[Route("api/[controller]")]
 	public class CourseController : Controller
 	{
-
+		//Add comment
 		private AppDbContext _db;
 		int ClassroomCounter = 0, i = 1;
 		int classRoomLength = 5;
@@ -33,10 +33,6 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		[Route("CreateCourse")]
 		public async Task<IActionResult> CreateCourse([FromBody]Course course)
 		{
-
-			
-
-
 				if (course.NumOfClassPerWeek > 3 || course.NumOfSlot > 3)
 				{
 					
