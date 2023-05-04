@@ -57,7 +57,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Message = "Invalid Username or Password";
-            return View();
+            return View("Login");
         }
 
         public IActionResult Register()
