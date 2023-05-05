@@ -127,7 +127,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		[Route("UnEnrollCourse")]
 		public async Task<IActionResult> UnEnrollCourse([FromBody]EnrollCourse enrollcourse)
 		{
-			if(enrollcourse == null)
+			if(enrollcourse.StudentEmail==null && enrollcourse.CourseId==null)
 			{
 				return BadRequest("No Data Found From Client Side");
 			}

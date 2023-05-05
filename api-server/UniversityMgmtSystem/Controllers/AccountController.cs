@@ -32,7 +32,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginUser)
         {
-            var user = await _userManager.FindByEmailAsync(loginUser.Email);
+            var user = await _userManager.FindByNameAsync(loginUser.Email);
             
             if (user != null)
             {
@@ -55,7 +55,9 @@ namespace UniversityMgmtSystemServerApi.Controllers
                     return Ok(new
                     {
                         token = new JwtSecurityTokenHandler().WriteToken(token),
-                        expiration = token.ValidTo
+                        expiration = token.ValidTo,
+                        Role= userRoles[0]
+
                     });
                 }
                 return Unauthorized();
@@ -68,7 +70,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterModel registerUser)
         {
             //Check if user exist in the DB
-            var userFromDb = await _userManager.FindByEmailAsync(registerUser.Password);
+            var userFromDb = await _userManager.FindByNameAsync(registerUser.Email);
             if (userFromDb != null)
             {
                 return StatusCode(StatusCodes.Status403Forbidden,
@@ -84,7 +86,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
             var newUserResponse = await _userManager.CreateAsync(newUser, registerUser.Password);
             if (newUserResponse.Succeeded)
             {
-                await _userManager.AddToRoleAsync(newUser, UserRoles.Student);
+                await _userManager.AddToRoleAsync(newUser, registerUser.Role);
                 return StatusCode(StatusCodes.Status201Created,
                         new Response { Status = "Success", Message = "User was created successfully!" });
             }

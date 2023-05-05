@@ -53,11 +53,11 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
                 JWT jwt = JsonConvert.DeserializeObject<JWT>(token);
                 HttpContext.Session.SetString("token", jwt.Token);
                 HttpContext.Session.SetString("Email", user.Email);
+				return RedirectToAction("Dashboard", jwt.Role, user);
 
-                return RedirectToAction("Index", "Home");
-            }
+			}
             ViewBag.Message = "Invalid Username or Password";
-			return RedirectToAction("Dashboard", "Student", user);
+            return View();
 		}
 
         public IActionResult Register()

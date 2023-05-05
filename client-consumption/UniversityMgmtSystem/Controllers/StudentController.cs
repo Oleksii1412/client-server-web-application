@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http;
 using UniversityMgmtSystemClientConsuming.Models.ControllerModel;
 using UniversityMgmtSystemClientConsuming.ViewModels;
 
@@ -117,6 +118,28 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 
 				ViewData["Error"] = response.ReasonPhrase;
 			return View();
+			}
+		}
+		[HttpGet]
+		public async Task<IActionResult> UnEnrollCourse(int id)
+		{
+			using (HttpClient httpClient = new HttpClient())
+			{
+
+				string LoginEmail = HttpContext.Session.GetString(UserNameSection);
+				if (LoginEmail == null)
+				{
+					ViewData["Error"] = "Login Again";
+					return View();
+				}
+				EnrollCourse enrollCourse = new EnrollCourse()
+				{
+					CourseId = id,
+					StudentEmail = LoginEmail
+				};
+
+				var response = await httpClient.PostAsJsonAsync("https://localhost:7003/api/Student/UnEnrollCourse", enrollCourse);
+				return RedirectToAction("GetEnrollCourse");
 			}
 		}
 	}
