@@ -33,6 +33,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel loginUser)
         {
             var user = await _userManager.FindByEmailAsync(loginUser.Email);
+            
             if (user != null)
             {
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, loginUser.Password);

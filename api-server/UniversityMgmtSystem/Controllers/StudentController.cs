@@ -80,6 +80,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 					CouserId=enrollCourse.CourseId
 				};
 				await _db.StudentCourses.AddAsync(studentCourse);
+				await _db.SaveChangesAsync();
 				return StatusCode(StatusCodes.Status200OK);
 
 			}
@@ -87,10 +88,11 @@ namespace UniversityMgmtSystemServerApi.Controllers
 			{
 				StudentCourse studentCourse = new StudentCourse()
 				{
-					StudentCourseId = student.StudentId,
+					StudentId = student.StudentId,
 					CouserId = enrollCourse.CourseId
 				};
 				await _db.StudentCourses.AddAsync(studentCourse);
+				await _db.SaveChangesAsync();
 				return StatusCode(StatusCodes.Status200OK);
 
 			}
