@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using UniversityMgmtSystemClientConsuming.Models.ControllerModel;
 using UniversityMgmtSystemClientConsuming.ViewModels;
 
 namespace UniversityMgmtSystemClientConsuming.Controllers
 {
+	
 	public class StudentController : Controller
 	{
-		LoginVM LoginUser;
+		public const string UserNameSection = "UserName";
 		public IActionResult DashBoard(LoginVM user)
 		{
-			LoginUser = user;
+			if(user==null)
+			{
+				return View("Please Login Properly");
+			}
+			HttpContext.Session.SetString(UserNameSection, user.Email);
 			return View(user);
 		}
 
@@ -60,18 +66,19 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 			return BadRequest();
 			
 		}
-		[HttpPost]
-		public async Task<IActionResult> EnrollCourse (int CourseId)
+		[HttpGet]
+		public async Task<IActionResult> EnrollCourse (int id)
 		{
-			if(LoginUser.Email==null)
+			string LoginEmail = HttpContext.Session.GetString(UserNameSection);
+			if(LoginEmail==null)
 			{
 				ViewData["Error"] = "Login Again";
 				return View();
 			}
 			EnrollCourse enrollCourse = new EnrollCourse()
 			{
-				CourseId = CourseId,
-				StudentEmail = LoginUser.Email
+				CourseId = id,
+				StudentEmail = LoginEmail
 			};
 			using(HttpClient httpClient = new HttpClient()) 
 			{
@@ -83,19 +90,24 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 					ViewData["Error"] = response.ReasonPhrase;
 					return View();
 				}
-				return View("GetEnrollCourse");
+				return RedirectToAction("GetEnrollCourse");
 			
 			}
 		}
 		[HttpGet]
-		public  async Task<IActionResult> GetEnrollCourse(string StudentEmail)
+		public  async Task<IActionResult> GetEnrollCourse()
 		{
 			using (HttpClient httpClient = new HttpClient())
 			{
-
+				string LoginEmail = HttpContext.Session.GetString(UserNameSection);
+				if (LoginEmail == null)
+				{
+					ViewData["Error"] = "Login Again";
+					return View();
+				}
 				List<Course> courses = new List<Course>();
 				var response = await httpClient.GetAsync("https://localhost:7003/api/Student/GetEnrollCourse/"+
-					StudentEmail);
+					LoginEmail);
 				if (response.IsSuccessStatusCode)
 				{
 					var content = await response.Content.ReadAsStringAsync();

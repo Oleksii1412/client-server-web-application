@@ -69,7 +69,6 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 				{
 					Course course = new Course();
 					String content= await response.Content.ReadAsStringAsync();
-
 					course = JsonConvert.DeserializeObject<Course>(content);
 
 					return View(course);	
