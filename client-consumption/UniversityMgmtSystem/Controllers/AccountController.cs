@@ -19,8 +19,8 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
             HttpClientFactory = httpClientFactory;
 		}
 		private IConfiguration Configuration { get; }
-
-        private IHttpClientFactory HttpClientFactory { get; }
+		public const string UserNameSection = "UserName";
+		private IHttpClientFactory HttpClientFactory { get; }
 
 		[HttpGet]
 		public IActionResult Login()
@@ -52,8 +52,10 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
                 var token = response.Content.ReadAsStringAsync().Result;
                 JWT jwt = JsonConvert.DeserializeObject<JWT>(token);
                 HttpContext.Session.SetString("token", jwt.Token);
-                HttpContext.Session.SetString("Email", user.Email);
-				return RedirectToAction("Dashboard", jwt.Role, user);
+                HttpContext.Session.SetString(UserNameSection, user.Email);
+                HttpContext.Session.SetString("Role", jwt.Role);
+
+				return RedirectToAction("Dashboard", jwt.Role);
 
 			}
             ViewBag.Message = "Invalid Username or Password";

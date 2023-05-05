@@ -5,9 +5,9 @@
 @if (httpContext.Session.GetString("token") != null)
 {
     <div class="dropdown">
-        <button class="btn btn-outline-success dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown" aria-expanded="false">
-            <i class="=bi bi-person-badge"></i> Hello User
-        </button>
+        <a class="btn btn-outline-primary p-3" asp-action="DashBoard" asp-controller="@httpContext.Session.GetString("Role")">
+            @httpContext.Session.GetString("UserName")
+        </a>
     </div>
     <span style="padding: 5px;"></span>
     <form asp-controller="Account" asp-action="Logout" method="post">
