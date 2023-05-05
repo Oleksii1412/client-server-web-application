@@ -101,7 +101,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 				 }
 
 
-				return View("Index");
+				return RedirectToAction("Index");
 			}
 		}
 		[HttpGet]
@@ -143,7 +143,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 
 
 				}
-				return BadRequest("No Course Found for id:" + course.CourseId);
+				return RedirectToAction("Index");
 
 			}
 
