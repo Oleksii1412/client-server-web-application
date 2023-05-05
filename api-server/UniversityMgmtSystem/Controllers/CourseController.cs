@@ -129,7 +129,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		public async Task<IActionResult> UpdateCourse([FromBody] Course course)
 		{
 			var editCourse = await _db.Courses.Where(c => c.CourseId == course.CourseId).FirstOrDefaultAsync();
-			editCourse.CourseName = course.CourseName.Trim();
+			editCourse.CourseName = course.CourseName;
 			editCourse.NumOfSlot = course.NumOfSlot;
 			editCourse.NumOfClassPerWeek = course.NumOfClassPerWeek;
 			var deleteSlots = await _db.Slots.Where(s => s.CourseId == editCourse.CourseId).ToListAsync();
@@ -220,7 +220,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 
 		[HttpGet]
 		[Route("GetCourseById/{id}")]
-		public async Task<Course> GetCourseById([FromBody]int id)
+		public async Task<Course> GetCourseById(int id)
 		{
 			Course course = _db.Courses.FirstOrDefault(c => c.CourseId == id);
 
@@ -231,7 +231,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 
 		[HttpDelete]
 		[Route("DeleteCourse/{id}")]
-		public async Task<IActionResult> DeleteCourse([FromBody] int id)
+		public async Task<IActionResult> DeleteCourse( int id)
 		{
 			var deleteCourse = await _db.Courses.Where(c => c.CourseId == id).FirstOrDefaultAsync();
 			if(deleteCourse == null) {
