@@ -141,7 +141,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 				});
 			}
 			StudentCourse studentCourses = await _db.StudentCourses.Where(sc => sc.StudentCourseId == student.StudentId
-			&& sc.CouserId == enrollcourse.CourseId).FirstOrDefaultAsync();
+			&& sc.CouserId== enrollcourse.CourseId).FirstOrDefaultAsync();
 			_db.StudentCourses.Remove(studentCourses);
 			await _db.SaveChangesAsync();
 			return StatusCode(StatusCodes.Status200OK);
