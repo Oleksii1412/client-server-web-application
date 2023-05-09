@@ -3,7 +3,7 @@
 
 <div class="container">
 	<div class="row">
-		<a>create</a>
+		@ViewData["Error"]
 	</div>
 
 	<table class="table table-striped">
@@ -28,25 +28,35 @@
 
 		</thead>
 
+		@if (Model.Count > 0)
+		{
+			<tbody>
+				@foreach (Course course in Model)
 
-		<tbody>
-			@foreach (Course course in Model)
+				{
 
-			{
+					<tr>
 
-				<tr>
+						<td>@course.CourseId</td>
+						<td>@course.CourseName</td>
+						<td>@course.TeacherId</td>
+						<td>@Html.ActionLink("UnEnroll","UnEnrollCourse", new {id= course.CourseId})</td>
 
-					<td>@course.CourseId</td>
-					<td>@course.CourseName</td>
-					<td>@course.TeacherId</td>
-					<td>@Html.ActionLink("UnEnroll","UnEnrollCourse", new {id= course.CourseId})</td>
+					</tr>
+				}
 
-				</tr>
-			}
-
-		</tbody>
+			</tbody>
+		}
+		else
+		{
+			<p class="text-danger"> No Course Enrolled</p>
+		}
 
 
 	</table>
 
+</div>
+
+<div>
+	@Html.ActionLink("Back DashBoard","DashBoard")
 </div>

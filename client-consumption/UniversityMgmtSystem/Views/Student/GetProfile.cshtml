@@ -1,21 +1,29 @@
 ﻿@model Student
 <div class="container">
 	<div class="row">
+		<form asp-action="UpdateProfile">
 		<div>
-			<label>Student ID</label>
-			<input asp-for="StudentId" disabled />
+			
+			<input asp-for="StudentId" hidden  />
 		</div>
 		<div>
-			<label>Email</label>
-			<input asp-for="Email" disabled />
+
+				<input asp-for="Email" />
 		</div>
 		<div>
 			<label>Name</label>
-			<input asp-for="StudentName"  />
+				<input asp-for="StudentName" class="form-control" />
 		</div>
 		<div>
 			<label>Date Of Birth</label>
-			<input asp-for="DateOfBirth" type="datetime"/>
+				<input asp-for="DateOfBirth" type="date" class="form-control" />
 		</div>
+		<button class="btn btn-success" type="submit">Upadate</button>
+		</form>
+	</div>
+
+	<div class="row">
+		@Html.ActionLink("Back DashBoard","DashBoard")
 	</div>
 </div>
+

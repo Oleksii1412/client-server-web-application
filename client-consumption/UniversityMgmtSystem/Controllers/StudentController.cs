@@ -11,19 +11,22 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 	public class StudentController : Controller
 	{
 		public const string UserNameSection = "UserName";
-		public IActionResult DashBoard(LoginVM user)
+		public IActionResult DashBoard()
 		{
-			if(user==null)
+			string LoginEmail = HttpContext.Session.GetString(UserNameSection);
+			if (LoginEmail == null)
 			{
 				return View("Please Login Properly");
 			}
-			HttpContext.Session.SetString(UserNameSection, user.Email);
-			return View(user);
+		
+			return View();
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetProfile(string StudentEmail)
+		public async Task<IActionResult> GetProfile()
 		{
+			string StudentEmail=HttpContext.Session.GetString(UserNameSection);
+
 			Student student = new Student();
 			using (HttpClient httpClient = new HttpClient())
 			{
@@ -37,11 +40,28 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 					return View(student);
 				}
 
+
 				ViewData["Error"] = response.ReasonPhrase;
 				return View();
 			}
 
 
+			
+		}
+		[HttpPost]
+		public async Task<IActionResult> UpdateProfile(Student student)
+		{
+			using(HttpClient httpClient = new HttpClient())
+			{
+				var response = await httpClient.PostAsJsonAsync("https://localhost:7003/api/Student/EditProfile", student);
+				if(response.IsSuccessStatusCode)
+				{
+					return RedirectToAction("DashBoard");
+				}
+			}
+		    
+
+			return RedirectToAction("GetProfile");
 			
 		}
 
