@@ -14,9 +14,9 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		{
 			_db = appDbContext;
 		}
-   
 
 
+		
 		[HttpGet]
 		[Route("GetTeacher")]
 		public async Task<List<Teacher>> GetTeachers()

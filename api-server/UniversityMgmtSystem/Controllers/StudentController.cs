@@ -141,15 +141,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 				});
 			}
 			StudentCourse studentCourses = await _db.StudentCourses.Where(sc => sc.StudentId == student.StudentId
-		    && sc.CouserId == enrollcourse.CourseId).FirstOrDefaultAsync();
-			if( studentCourses == null)
-			{
-				return StatusCode(StatusCodes.Status404NotFound, new Response
-				{
-					Status = "Error",
-					Message = "Course Found At Given Stud"
-				});
-			}
+			&& sc.CouserId == enrollcourse.CourseId).FirstOrDefaultAsync();
 			_db.StudentCourses.Remove(studentCourses);
 			await _db.SaveChangesAsync();
 			return StatusCode(StatusCodes.Status200OK);
