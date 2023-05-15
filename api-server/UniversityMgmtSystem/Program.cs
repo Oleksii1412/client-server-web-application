@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UniversityMgmtSystem.Data;
+using UniversityMgmtSystemServerApi.Middlleware;
 using UniversityMgmtSystemServerApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +82,7 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ErrorHandler>();
 app.MapControllers();
 AppDbInitializer.SeedUsersAndRoles(app).Wait();
 app.Run();

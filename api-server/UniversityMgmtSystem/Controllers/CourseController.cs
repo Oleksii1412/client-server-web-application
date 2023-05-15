@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using UniversityMgmtSystem.Data;
+using UniversityMgmtSystem.Data.Static;
 using UniversityMgmtSystemServerApi.Models;
 
 namespace UniversityMgmtSystemServerApi.Controllers
@@ -23,6 +25,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 
 		[HttpGet]
 		[Route("GetCourses")]
+
 		public async Task<IEnumerable<Course>> GetCourses()
 		{
 			return await _db.Courses.ToListAsync();
