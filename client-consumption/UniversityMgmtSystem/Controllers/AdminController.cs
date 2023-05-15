@@ -4,9 +4,15 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 {
 	public class AdminController : Controller
 	{
-		public IActionResult DashBoard()
+        public const string UserNameSection = "UserName";
+        public IActionResult DashBoard()
 		{
-			return View();
+            string LoginEmail = HttpContext.Session.GetString(UserNameSection);
+            if (LoginEmail == null)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            return View();
 		}
 	}
 }

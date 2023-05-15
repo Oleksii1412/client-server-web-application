@@ -45,6 +45,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 			var content= new StringContent(JsonConvert.SerializeObject(course));
 		
 			request.Content = content;
+
 			request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 			request.Content.Headers.ContentType=new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 			var response = await _httpClient.SendAsync(request);

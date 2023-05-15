@@ -48,7 +48,7 @@ namespace XUnitTestClientConsuming
 				new Teacher { TeacherId = 2, TeacherName = "Jane Smith" }
 			};
 			_mockDbContext.Setup(db => db.Teachers.FindAsync(It.IsAny<int>())).Returns(() => Task.FromResult(expectedTeachers));
-			_db.Teachers.FindAsync(It.IsAny<int>())
+			_db.Teachers.FindAsync(It.IsAny<int>());
 
 
 			// Act
@@ -60,26 +60,31 @@ namespace XUnitTestClientConsuming
 			
 		}
 
-		/*
+		
 		[Test]
 		public async Task CreateTeacher_ReturnsOk_WhenTeacherIsNotNull()
 		{
-			// Arrange
-			var teacher = new UniversityMgmtSystemServerApi.Models.Teacher();
+            // Arrange
+            var expectedTeachers = new List<Teacher>
+            {
+                new Teacher { TeacherId = 1, TeacherName = "John Doe" },
+                new Teacher { TeacherId = 2, TeacherName = "Jane Smith" }
+            };
+            var teacher = new UniversityMgmtSystemServerApi.Models.Teacher();
 
-			_mockDbContext.Setup(db => db.Teachers).Returns(expectedTeachers);
+			
 
 			// Act
 			var result = await _teacherController.CreateTeacher(teacher);
 
 			// Assert
-			Assert.IsType<StatusCodeResult>(result);
+		
 			var statusCodeResult = (StatusCodeResult)result;
 			Assert.Equals(StatusCodes.Status200OK, statusCodeResult.StatusCode);
 
 			_mockDbContext.Verify();
 		}
-		*/
+		
 
 
 	}

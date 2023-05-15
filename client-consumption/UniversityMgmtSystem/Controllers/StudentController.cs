@@ -16,7 +16,7 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 			string LoginEmail = HttpContext.Session.GetString(UserNameSection);
 			if (LoginEmail == null)
 			{
-				return View("Please Login Properly");
+				return RedirectToAction("Login","Account");
 			}
 		
 			return View();
