@@ -36,7 +36,13 @@ namespace UniversityMgmtSystemClientConsuming.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateTeacher(Teacher teacher)
+            
         {
+
+            if(teacher.TeacherName== null)
+            {
+                return View();
+            }
             var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7003/api/Teacher/CreateTeacher");
             var content = new StringContent(JsonConvert.SerializeObject(teacher));
 

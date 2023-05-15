@@ -17,6 +17,7 @@ namespace UniversityMgmtSystemServerApi.Controllers
 		int classRoomLength = 5;
 		int dayCounter = 1;
 		int slotnum = 1;
+		int slotnumCheck = 1;
 		public CourseController(AppDbContext db)
 		{
 			_db = db;
@@ -47,78 +48,88 @@ namespace UniversityMgmtSystemServerApi.Controllers
 				}
 				await _db.Courses.AddAsync(course);
 				await _db.SaveChangesAsync();
-				while (i <= course.NumOfClassPerWeek )
+			while (i <= course.NumOfClassPerWeek)
+			{
+
+				Day days = await _db.Days.Where(day => day.DayNum == dayCounter).FirstOrDefaultAsync();
+				days.ClassRooms = await _db.ClassRooms.Where(classroom => classroom.DayId == days.DayId).ToListAsync();
+				classRoomLength = days.ClassRooms.Count();
+				int classroomId = days.ClassRooms[ClassroomCounter].ClassRoomId;
+				 slotnum = slotnumCheck;
+
+                slotnum = _db.Slots.Where(s => s.ClassRoomId == classroomId).Count() + 1;
+				Course createdCourse = await _db.Courses.Where(cou => cou.CourseName == course.CourseName)
+				.FirstOrDefaultAsync();
+
+				if (await _db.Slots.Where(s => s.SlotNum == slotnum && s.ClassRoomId == classroomId)
+				.FirstOrDefaultAsync() == null)
 				{
-
-					Day days = await _db.Days.Where(day => day.DayNum == dayCounter).FirstOrDefaultAsync();
-					days.ClassRooms = await _db.ClassRooms.Where(classroom => classroom.DayId == days.DayId).ToListAsync();
-					classRoomLength = days.ClassRooms.Count();
-					int classroomId = days.ClassRooms[ClassroomCounter].ClassRoomId;
-				    slotnum= _db.Slots.Where(s=>s.ClassRoomId == classroomId).Count()+1;
-					Course createdCourse = await _db.Courses.Where(cou => cou.CourseName == course.CourseName)
-					.FirstOrDefaultAsync();
-
-					if (await _db.Slots.Where(s => s.SlotNum == slotnum && s.ClassRoomId == classroomId)
-					.FirstOrDefaultAsync() == null)
+					for (int j = 0; j < course.NumOfSlot; j++)
 					{
-						for (int j = 0; j < course.NumOfSlot; j++)
+
+						if (slotnum > 5)
 						{
+							i--;
+							dayCounter--;
+							course.NumOfSlot = course.NumOfSlot - j;
+							ClassroomCounter++;
+							break;
+						}
 
-							if (slotnum > 5)
-							{
-								i--;
-							    dayCounter--;
-							    course.NumOfSlot= course.NumOfSlot - j;
-								ClassroomCounter++;
-								break;
-							}
-						   
-							Slot slot = new Slot()
-							{
-								SlotNum = slotnum,
-								CourseId = createdCourse.CourseId,
-								ClassRoomId = classroomId
-							};
-
-								
-							await _db.Slots.AddAsync(slot);
-							await _db.SaveChangesAsync();
-						    slotnum++;
-						    ClassroomCounter = 0;
-
-
+						Slot slot = new Slot()
+						{
+							SlotNum = slotnum,
+							CourseId = createdCourse.CourseId,
+							ClassRoomId = classroomId
 						};
+
+
+						await _db.Slots.AddAsync(slot);
+						await _db.SaveChangesAsync();
+						slotnum++;
+						ClassroomCounter = 0;
+
+
+					};
 					i++;
 					dayCounter++;
 				}
-				   else
-				   {
-					slotnum++;
-				   }
-				  
-						if (ClassroomCounter >= classRoomLength)
+				else
+				{
+					slotnumCheck++;
+				}
+
+				if (ClassroomCounter >= classRoomLength)
+				{
+					dayCounter++;
+					ClassroomCounter = 0;
+
+				}
+				else if (slotnumCheck > 5)
+
+				{
+
+					dayCounter++;
+
+
+
+
+
+				}
+
+				else if (dayCounter > 5)
+				{
+
+
+					return StatusCode(StatusCodes.Status416RequestedRangeNotSatisfiable,
+						new Response
 						{
-								dayCounter++;
-								ClassroomCounter=0;
+							Status = "Error",
+							Message = "Create more ClassRooms"
+						});
 
-						}
-						else if (dayCounter > 5)
-						{
-						
-
-							return StatusCode(StatusCodes.Status416RequestedRangeNotSatisfiable,
-								new Response
-								{
-									Status="Error",
-									Message= "Create more ClassRooms"
-								});
-
-						}
-
-				
-				
-
-			    }
+				}
+			}
 				
 
 				return StatusCode(StatusCodes.Status200OK);
